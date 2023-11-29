@@ -89,10 +89,10 @@ def train_model(args, train_data_loader, valid_data_loader, class_to_idx):
     in_features_of_pretrained_model = model.classifier[0].in_features
 
     # alter the classifier so that it has 102 out features (i.e. len(cat_to_name.json))
-    classifier = nn.Sequential(nn.Linear(in_features=in_features_of_pretrained_model, out_features=2048, bias=True),
+    classifier = nn.Sequential(nn.Linear(in_features=in_features_of_pretrained_model, out_features=args.hidden_unit, bias=True),
                                nn.ReLU(inplace=True),
                                nn.Dropout(p=0.2),
-                               nn.Linear(in_features=2048, out_features=102, bias=True),
+                               nn.Linear(in_features=args.hidden_unit, out_features=102, bias=True),
                                nn.LogSoftmax(dim=1)
                               )
 
@@ -227,6 +227,7 @@ if __name__ == '__main__':
     parser.add_argument('--save_directory', dest='save_directory', help="This is the dir where the model will be saved after training.", default='./saved_models')
     parser.add_argument('--learning_rate', dest='learning_rate', help="This is the learning rate when training the model. Default is 0.003. Expect float type", default=0.003, type=float)
     parser.add_argument('--epochs', dest='epochs', help="This is the number of epochs when training the model. Default is 5. Expect int type", default=3, type=int)
+    parser.add_argument('--hidden_unit', dest='hidden_unit', help="This is the number of hidden units when training the model. Default is 2048. Expect int type", default=2048, type=int)
     parser.add_argument('--gpu', dest='gpu', help="Include this argument if you want to train the model on the GPU via CUDA", action='store_true', default=True)
     parser.add_argument('--model_arch', dest='model_arch', help="This is type of pre-trained model that will be used", default="vgg16", type=str, choices=['vgg11', 'vgg13', 'vgg16', 'vgg19'])
 
